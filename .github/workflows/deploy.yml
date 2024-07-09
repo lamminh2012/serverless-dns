@@ -29,6 +29,6 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "lamminh-serverless-28"
+          project: "lamminh"
           entrypoint: "src/server-deno.ts"
           root: ""
