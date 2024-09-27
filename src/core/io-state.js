@@ -182,8 +182,11 @@ export default class IOState {
   }
 
   headers(b = null) {
-    const xNileFlags = this.isDnsBlock ? { "x-nile-flags": this.flag } : null;
-    const xNileFlagsOk = !xNileFlags ? { "x-nile-flags-dn": this.flag } : null;
+    const hasBlockFlag = !util.emptyString(this.flag);
+    const isBlocked = hasBlockFlag && this.isDnsBlock;
+    const couldBlock = hasBlockFlag && !this.isDnsBlock;
+    const xNileFlags = isBlocked ? { "x-nile-flags": this.flag } : null;
+    const xNileFlagsOk = couldBlock ? { "x-nile-flags-dn": this.flag } : null;
     const xNileRegion = !util.emptyString(this.region)
       ? { "x-nile-region": this.region }
       : null;
@@ -191,6 +194,7 @@ export default class IOState {
     return util.concatHeaders(
       util.dnsHeaders(),
       util.contentLengthHeader(b),
+      this.cacheHeaders(),
       xNileRegion,
       xNileFlags,
       xNileFlagsOk
@@ -213,6 +217,16 @@ export default class IOState {
     for (const [k, v] of Object.entries(util.corsHeaders())) {
       this.httpResponse.headers.set(k, v);
     }
+  }
+
+  // set cache from ttl in decoded-dns-packet
+  cacheHeaders() {
+    const ttl = dnsutil.ttl(this.decodedDnsPacket);
+    if (ttl <= 0) return null;
+
+    return {
+      "cache-control": "public, max-age=" + ttl,
+    };
   }
 
   assignBlockResponse() {
