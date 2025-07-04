@@ -10,16 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'  # Use Node.js 20 (compatible with >=16 requirement)
-          cache: 'npm'        # Cache npm dependencies for faster builds
-
-      # Step 3: Install Node.js dependencies
-      - name: Install dependencies
-        run: npm ci  # Use npm ci for reproducible builds
 
       # Step 4: Build the project for Fastly
       - name: Build for Fastly
