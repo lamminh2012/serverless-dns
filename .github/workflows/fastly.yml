@@ -2,20 +2,39 @@ name: Deploy Application
 on:
   push:
     branches: [main]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      # Step 1: Checkout the repository
+      - uses: actions/checkout@v4
 
-    - name: Install Rust toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-          toolchain: stable
-          target: wasm32-wasip1 # WebAssembly target
+      # Step 2: Set up Node.js (required for npm and webpack)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Use the Node.js version required by your project
+          cache: 'npm'        # Cache npm dependencies for faster builds
 
-    - name: Deploy to Compute@Edge
-      uses: fastly/compute-actions@v5
-      env:
-        FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_KEY }}
+      # Step 3: Install Node.js dependencies
+      - name: Install dependencies
+        run: npm ci  # Use npm ci for CI environments (faster and more reliable)
+
+      # Step 4: Set up Rust toolchain (for WebAssembly compilation)
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1  # Use wasm32-wasi if supported by your project
+
+      # Step 5: Build the project (runs webpack and fastly:wasm)
+      - name: Build for Fastly
+        run: npm run build:fastly
+
+      # Step 6: Deploy to Fastly Compute@Edge
+      - name: Deploy to Compute@Edge
+        uses: fastly/compute-actions@v5
+        env:
+          FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_KEY }}
+        with:
+          service_id: '3BCRKNm5R0iXXcfZzmwmn8'
+          verbose: true  # Enable verbose output for debugging
