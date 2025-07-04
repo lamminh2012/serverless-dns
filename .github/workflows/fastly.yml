@@ -1,4 +1,4 @@
-name: Deploy Application
+name: Deploy to Fastly Compute@Edge
 on:
   push:
     branches: [main]
@@ -7,20 +7,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout the repository
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-
-      # Step 4: Set up Rust toolchain (for WebAssembly compilation)
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          targets: wasm32-wasip1  # Use wasm32-wasi if supported by your project
+          node-version: '20'  # Use Node.js 20 (compatible with >=16 requirement)
+          cache: 'npm'        # Cache npm dependencies for faster builds
 
-      # Step 5: Build the project (runs webpack and fastly:wasm)
+      # Step 3: Install Node.js dependencies
+      - name: Install dependencies
+        run: npm ci  # Use npm ci for reproducible builds
+
+      # Step 4: Build the project for Fastly
       - name: Build for Fastly
         run: npm run build:fastly
+        env:
+          # Ensure js-compute-runtime can access Fastly-specific modules
+          FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_KEY }}
 
-      # Step 6: Deploy to Fastly Compute@Edge
+      # Step 5: Deploy to Fastly Compute@Edge
       - name: Deploy to Compute@Edge
         uses: fastly/compute-actions@v5
         env:
