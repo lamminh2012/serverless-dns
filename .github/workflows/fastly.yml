@@ -1,28 +1,23 @@
-name: Deploy to Fastly Compute@Edge
+name: Deploy Application
 on:
   push:
     branches: [main]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v2
 
+    - name: Install Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: stable
+          target: wasm32-wasip1 # WebAssembly target
 
-      # Step 4: Build the project for Fastly
-      - name: Build for Fastly
-        run: npm run build:fastly
-        env:
-          # Ensure js-compute-runtime can access Fastly-specific modules
-          FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_KEY }}
-
-      # Step 5: Deploy to Fastly Compute@Edge
-      - name: Deploy to Compute@Edge
-        uses: fastly/compute-actions@v5
-        env:
-          FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_KEY }}
-        with:
-          service_id: '3BCRKNm5R0iXXcfZzmwmn8'
-          verbose: true  # Enable verbose output for debugging
+    - name: Deploy to Compute@Edge
+      uses: fastly/compute-actions@v5
+      env:
+        FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_KEY }}
+      with:
+        service_id: '3BCRKNm5R0iXXcfZzmwmn8'
