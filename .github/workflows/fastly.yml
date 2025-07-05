@@ -14,6 +14,16 @@ jobs:
       with:
           targets: wasm32-wasip1 # WebAssembly target
 
+    - name: Verify Webpack and Webpack-CLI installation
+        run: |
+          echo "Verifying webpack and webpack-cli existence in node_modules:"
+          ls -l node_modules/webpack
+          ls -l node_modules/webpack-cli
+          echo "Trying npx webpack --version"
+          npx webpack --version
+          echo "Trying npx webpack-cli --version"
+          npx webpack-cli --version      
+
     - name: Deploy to Compute
       uses: fastly/compute-actions@v11
       env:
