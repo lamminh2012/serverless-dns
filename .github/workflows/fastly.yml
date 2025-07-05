@@ -14,6 +14,14 @@ jobs:
       with:
           targets: wasm32-wasip1 # WebAssembly target 
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+          node-version: '20' # Or your preferred Node.js version     
+
+    - name: Install JavaScript dependencies
+      run: npm install # This will install webpack and other dependencies from your package.json
+        
     - name: Deploy to Compute
       uses: fastly/compute-actions@v11
       env:
