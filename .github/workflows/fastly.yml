@@ -21,6 +21,9 @@ jobs:
 
     - name: Install JavaScript dependencies
       run: npm install # This will install webpack and other dependencies from your package.json
+
+    - name: Build for Fastly
+      run: npm run build:fastly  
         
     - name: Deploy to Compute
       uses: fastly/compute-actions@v11
