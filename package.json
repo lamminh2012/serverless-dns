@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/serverless-dns/serverless-dns#readme",
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "dependencies": {
     "@riaskov/mmap-io": "^1.4.3",
@@ -42,7 +42,7 @@
     "@fastly/js-compute": "^1.0.1"
   },
   "devDependencies": {
-    "@types/node": "^22.15.3",
+    "@types/node": "^20.19.2",
     "buffer": "^6.0.3",
     "clinic": "^11.1.0",
     "eslint": "^8.5.0",
