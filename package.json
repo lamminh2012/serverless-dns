@@ -35,27 +35,27 @@
     "@serverless-dns/lfu-cache": "github:serverless-dns/lfu-cache#v3.5.2",
     "@serverless-dns/trie": "github:serverless-dns/trie#v0.0.17",
     "httpx-server": "^2.0.0",
-    "node-polyfill-webpack-plugin": "^2.0.1",
+    "node-polyfill-webpack-plugin": "^4.0.0",
     "proxy-protocol-js": "^4.0.5"
   },
   "optionalDependencies": {
-    "@fastly/js-compute": "^1.0.1"
+    "@fastly/js-compute": "^3.5.0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7",
+    "@types/node": "^22.7.4",
     "buffer": "^6.0.3",
-    "clinic": "^11.1.0",
-    "eslint": "^8.5.0",
+    "clinic": "^14.0.0",
+    "eslint": "^9.13.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.4",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^10.0.1",
+    "lint-staged": "^15.2.10",
     "node-loader": "^2.0.0",
-    "prettier": "2.5.1",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^4.10.0",
+    "prettier": "3.3.3",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
     "why-is-node-running": "^3.2.0",
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.78.2"
   },
   "lint-staged": {
     "*.?(m|c)js": "eslint --cache --fix",
